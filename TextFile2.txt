@@ -1,0 +1,1221 @@
+﻿using System;
+using System.Data.SQLite;
+using System.Windows.Forms;
+using System.IO;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+
+namespace Soccer_APP
+{
+    public class Championship : IDisposable
+    {
+        public SQLiteConnection connection { get; } = null;
+        string path;
+        public Championship(string path)
+        {
+            this.path = path;
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    //createDB(path);
+                    throw new Exception("Database not found");
+                }
+                connection = new SQLiteConnection($"Data Source={path}; Version=3;");
+                connection.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public static void createDB(string path)
+        {
+            SQLiteConnection.CreateFile(path);
+            SQLiteConnection connection = new SQLiteConnection($"Data Source={path}; Version=3;");
+            connection.Open(); // открыть соединение
+
+            string commandText = "PRAGMA foreign_keys = ON;";
+            SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery();
+
+            commandText = "CREATE TABLE IF NOT EXISTS teams (" + // создать таблицу, если её нет
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                     "name VARCHAR(50)" +
+                     ")";
+            Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery(); // выполнить запрос
+
+            commandText = "CREATE TABLE IF NOT EXISTS games (" + // создать таблицу, если её нет
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                     "first_team INTEGER," +
+                     "second_team INTEGER," +
+                     "first_score INTEGER," +
+                     "second_score INTEGER," +
+                     "FOREIGN KEY (first_team) REFERENCES teams(id)," +
+                     "FOREIGN KEY (second_team) REFERENCES teams(id)" +
+                     ")";
+            Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery(); // выполнить запрос
+            connection.Close(); // закрыть соединение
+        }
+
+        public void Dispose()
+        {
+            if (connection != null) connection.Close();
+        }
+
+        public List<string> getTeamNamesList()
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT name FROM teams;";
+            try
+            {
+                SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                while (sqlReader.Read())
+                {
+                    result.Add(sqlReader["name"].ToString());
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        using System;
+using System.Data.SQLite;
+using System.Windows.Forms;
+using System.IO;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+
+namespace Soccer_APP
+{
+    public class Championship : IDisposable
+    {
+        public SQLiteConnection connection { get; } = null;
+        string path;
+        public Championship(string path)
+        {
+            this.path = path;
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    //createDB(path);
+                    throw new Exception("Database not found");
+                }
+                connection = new SQLiteConnection($"Data Source={path}; Version=3;");
+                connection.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public static void createDB(string path)
+        {
+            SQLiteConnection.CreateFile(path);
+            SQLiteConnection connection = new SQLiteConnection($"Data Source={path}; Version=3;");
+            connection.Open(); // открыть соединение
+
+            string commandText = "PRAGMA foreign_keys = ON;";
+            SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery();
+
+            commandText = "CREATE TABLE IF NOT EXISTS teams (" + // создать таблицу, если её нет
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                     "name VARCHAR(50)" +
+                     ")";
+            Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery(); // выполнить запрос
+
+            commandText = "CREATE TABLE IF NOT EXISTS games (" + // создать таблицу, если её нет
+                     "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                     "first_team INTEGER," +
+                     "second_team INTEGER," +
+                     "first_score INTEGER," +
+                     "second_score INTEGER," +
+                     "FOREIGN KEY (first_team) REFERENCES teams(id)," +
+                     "FOREIGN KEY (second_team) REFERENCES teams(id)" +
+                     ")";
+            Command = new SQLiteCommand(commandText, connection);
+            Command.ExecuteNonQuery(); // выполнить запрос
+            connection.Close(); // закрыть соединение
+        }
+
+        public void Dispose()
+        {
+            if (connection != null) connection.Close();
+        }
+
+        public List<string> getTeamNamesList()
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT name FROM teams;";
+            try
+            {
+                SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                while (sqlReader.Read())
+                {
+                    result.Add(sqlReader["name"].ToString());
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        public List<TeamInfo> getFullTeamsInfo()
+        {
+            List<TeamInfo> teamsInfoList = new List<TeamInfo>();
+            List<int> teamIDs = getTeamsIds();
+            foreach(int id in teamIDs)
+            {
+                TeamInfo teamInfo = new TeamInfo();
+                teamInfo.name = getTeamNameById(id);
+                teamInfo.numberOfGames = getTeamNumberOfGames(id);
+                teamInfo.numberOfWins = getTeamNumberOfWins(id);
+                teamInfo.numberOfDraws = getTeamNumberOfDraws(id);
+                teamInfo.numberOfLosses = getTeamNumberOfLosses(id);
+                teamInfo.numberOfGoalsMade = getTeamNumberOfGoals(id);
+                teamInfo.numberOfGoalsMissed = getTeamNumberOfMissedShots(id);
+                teamInfo.numberOfPoints = teamInfo.numberOfWins * 3 + teamInfo.numberOfDraws * 1;
+                teamsInfoList.Add(teamInfo);
+            }
+            teamsInfoList.Sort(compare);
+
+            return teamsInfoList;
+        }
+
+        private int compare (TeamInfo A, TeamInfo B)
+        {
+            if (A.numberOfPoints > B.numberOfPoints) return -1;
+            if (A.numberOfPoints < B.numberOfPoints) return 1;
+            
+            if (A.numberOfWins > B.numberOfWins) return -1;
+            if (A.numberOfWins < B.numberOfWins) return 1;
+
+            int diffA = A.numberOfGoalsMade - A.numberOfGoalsMissed;
+            int diffB = B.numberOfGoalsMade - B.numberOfGoalsMissed;
+            if (diffA > diffB) return -1;
+            if (diffA < diffB) return 1;
+
+            if (A.numberOfGoalsMade > B.numberOfGoalsMade) return -1;
+            if (A.numberOfGoalsMade < B.numberOfGoalsMade) return 1;
+
+            return 0;
+        }
+
+        private int getTeamNumberOfMissedShots(int id)
+        {
+            int numOfMissedHome = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(second_score) FROM games
+                                WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfMissedHome = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            int numOfMissedGuest = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(first_score) FROM games
+                                WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfMissedGuest = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfMissedHome + numOfMissedGuest;
+        }
+
+        private int getTeamNumberOfGoals(int id)
+        {
+            int numOfHomeGoals = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(first_score) FROM games
+                                WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfHomeGoals = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            int numOfGuestGoals = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(second_score) FROM games
+                                WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfGuestGoals = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfHomeGoals + numOfGuestGoals;
+        }
+
+        private int getTeamNumberOfLosses(int id)
+        {
+            int numOfLosses = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score < second_score
+                                OR
+                                    second_team = @id AND first_score > second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfLosses = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfLosses;
+        }
+
+        private int getTeamNumberOfDraws(int id)
+        {
+            int numOfDraws = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score == second_score
+                                OR
+                                    second_team = @id AND first_score == second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfDraws = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfDraws;
+        }
+
+        private int getTeamNumberOfWins(int id)
+        {
+            int numOfWins = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score > second_score
+                                OR
+                                    second_team = @id AND first_score < second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfWins = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfWins;
+        }
+
+        private int getTeamNumberOfGames(int id)
+        {
+            int NumOfHomeGames = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                NumOfHomeGames = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            int NumOfGuestGames = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                NumOfGuestGames = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return NumOfHomeGames+NumOfGuestGames;
+        }
+
+        private string getTeamNameById(int id)
+        {
+            string teamName = "unknown";
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT name FROM teams WHERE id = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                teamName = cmd.ExecuteScalar().ToString();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return teamName;
+        }
+
+        private List<int> getTeamsIds()
+        {
+            List<int> teamIDs = new List<int>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT id FROM teams;";
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        int id = int.Parse(sqlReader["id"].ToString());
+                        teamIDs.Add(id);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            return teamIDs;
+        }
+        
+        public int getNumberOfTeams()
+        {
+            int result = -1;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM teams;";
+            try
+            {
+                result = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        public void addNewTeam(string teamName)
+        {
+            try
+            {
+                string commandText = "INSERT INTO [teams] ([id], [name]) VALUES (@id, @name)";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", null);
+                Command.Parameters.AddWithValue("@name", teamName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void deleteTeam(string teamName)
+        {
+            try
+            {
+                string commandText = "DELETE FROM [teams] WHERE name = @name";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@name", teamName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void deleteAllTeams()
+        {
+            try
+            {
+                string commandText = "DELETE FROM [teams]";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void renameTeam(string oldName, string newName)
+        {
+            try
+            {
+                string commandText = "UPDATE [teams] SET name = @newName WHERE name = @oldName";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@oldName", oldName);
+                Command.Parameters.AddWithValue("@newName", newName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public List<GameInfo> getGamesInfo(string teamName = "")
+        {
+            List<GameInfo> result = new List<GameInfo>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            if (teamName == "")
+            {
+                cmd.CommandText = @"SELECT a.id as id, b.name as first_name, c.name as second_name, a.first_score, a.second_score
+                                FROM games a
+                                LEFT JOIN teams b ON a.first_team = b.id
+                                LEFT JOIN teams c ON a.second_team = c.id";
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        GameInfo gameInfo = new GameInfo(int.Parse(sqlReader["id"].ToString()), sqlReader["first_name"].ToString(), sqlReader["second_name"].ToString(), int.Parse(sqlReader["first_score"].ToString()), int.Parse(sqlReader["second_score"].ToString()));
+                        result.Add(gameInfo);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                cmd.CommandText = @"SELECT a.id as id, b.name as first_name, c.name as second_name, a.first_score, a.second_score
+                                FROM games a
+                                LEFT JOIN teams b ON a.first_team = b.id
+                                LEFT JOIN teams c ON a.second_team = c.id
+                                WHERE b.name = @team_name OR c.name = @team_name;";
+                cmd.Parameters.AddWithValue("@team_name", teamName);
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        GameInfo gameInfo = new GameInfo(int.Parse(sqlReader["id"].ToString()), sqlReader["first_name"].ToString(), sqlReader["second_name"].ToString(), int.Parse(sqlReader["first_score"].ToString()), int.Parse(sqlReader["second_score"].ToString()));
+                        result.Add(gameInfo);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            return result;
+        }
+
+        public void addNewGame(string teamName1, string teamName2, int scoreTeam1, int scoreTeam2)
+        {
+            int id1 = getTeamId(teamName1);
+            int id2 = getTeamId(teamName2);
+            if(id1 == id2)
+            {
+                MessageBox.Show("Different teams must be selected");
+                return;
+            }
+            try
+            {
+                string commandText = "INSERT INTO games (first_team, second_team, first_score, second_score) VALUES (@id1, @id2, @score1, @score2)";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id1", id1);
+                Command.Parameters.AddWithValue("@id2", id2);
+                Command.Parameters.AddWithValue("@score1", scoreTeam1);
+                Command.Parameters.AddWithValue("@score2", scoreTeam2);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        int getTeamId(string teamName)
+        {
+            int result = -1;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT id FROM teams WHERE name = @name";
+            cmd.Parameters.AddWithValue("@name", teamName);
+            try
+            {
+                result = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        public int getNumOfGames()
+        {
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count(id) FROM teams";
+            try
+            {
+                return int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return 0;
+        }
+
+        public void deleteGame(int id)
+        {
+            try
+            {
+                string commandText = "DELETE FROM [games] WHERE id = @id";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", id);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void correct(int id, string teamName1, string teamName2, int scoreTeam1, int scoreTeam2)
+        {
+            int id1 = getTeamId(teamName1);
+            int id2 = getTeamId(teamName2);
+            if (id1 == id2)
+            {
+                MessageBox.Show("Different teams must be selected");
+                return;
+            }
+            try
+            {
+                string commandText = "UPDATE games SET first_team = @id1, second_team = @id2, first_score = @score1, second_score = @score2 WHERE @id = id;";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", id);
+                Command.Parameters.AddWithValue("@id1", id1);
+                Command.Parameters.AddWithValue("@id2", id2);
+                Command.Parameters.AddWithValue("@score1", scoreTeam1);
+                Command.Parameters.AddWithValue("@score2", scoreTeam2);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+    }
+
+    public class GameInfo
+    {
+        public GameInfo(int id, string teamOneName, string teamTwoName, int teamOneScore, int teamTwoScore)
+        {
+            Id = id;
+            TeamOneName = teamOneName;
+            TeamTwoName = teamTwoName;
+            TeamOneScore = teamOneScore;
+            TeamTwoScore = teamTwoScore;
+        }
+
+        public int Id { set; get; }
+        public string TeamOneName { set; get; }
+        public string TeamTwoName { set; get; }
+        public int TeamOneScore { set; get; }
+        public int TeamTwoScore { set; get; }
+    }
+
+    public class TeamInfo
+    {
+        public string name { set; get; }
+        public int numberOfGames { set; get; }
+        public int numberOfWins { set; get; }
+        public int numberOfDraws { set; get; }
+        public int numberOfLosses { set; get; }
+        public int numberOfGoalsMade { set; get; }
+        public int numberOfGoalsMissed { set; get; }
+        public int numberOfPoints { set; get; }
+    }
+}
+
+//SQLiteCommand cmd = connection.CreateCommand();
+//cmd.CommandText = @"SELECT * FROM teams;";
+//try
+//{
+//    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+//    var columns = new List<string>();
+//    for (int i = 0; i < sqlReader.FieldCount; i++)
+//    {
+//        columns.Add(sqlReader.GetName(i));
+//    }
+
+//    listBox1.Items.Clear();
+//    while (sqlReader.Read())
+//    {
+//        string output = "";
+//        for (int i = 0; i < sqlReader.FieldCount; i++)
+//        {
+//            string colName = columns[i];                     
+//            output+=$"{colName}: {sqlReader[colName].ToString()},  ";
+//        }
+//        listBox1.Items.Add(output);
+//    }
+//}
+//catch (SQLiteException ex)
+//{
+//    MessageBox.Show(ex.Message);
+//}
+
+        private int compare (TeamInfo A, TeamInfo B)
+        {
+            if (A.numberOfPoints > B.numberOfPoints) return -1;
+            if (A.numberOfPoints < B.numberOfPoints) return 1;
+            
+            if (A.numberOfWins > B.numberOfWins) return -1;
+            if (A.numberOfWins < B.numberOfWins) return 1;
+
+            int diffA = A.numberOfGoalsMade - A.numberOfGoalsMissed;
+            int diffB = B.numberOfGoalsMade - B.numberOfGoalsMissed;
+            if (diffA > diffB) return -1;
+            if (diffA < diffB) return 1;
+
+            if (A.numberOfGoalsMade > B.numberOfGoalsMade) return -1;
+            if (A.numberOfGoalsMade < B.numberOfGoalsMade) return 1;
+
+            return 0;
+        }
+
+        private int getTeamNumberOfMissedShots(int id)
+        {
+            int numOfMissedHome = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(second_score) FROM games
+                                WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfMissedHome = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            int numOfMissedGuest = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(first_score) FROM games
+                                WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfMissedGuest = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfMissedHome + numOfMissedGuest;
+        }
+
+        private int getTeamNumberOfGoals(int id)
+        {
+            int numOfHomeGoals = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(first_score) FROM games
+                                WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfHomeGoals = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            int numOfGuestGoals = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT sum(second_score) FROM games
+                                WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfGuestGoals = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfHomeGoals + numOfGuestGoals;
+        }
+
+        private int getTeamNumberOfLosses(int id)
+        {
+            int numOfLosses = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score < second_score
+                                OR
+                                    second_team = @id AND first_score > second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfLosses = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfLosses;
+        }
+
+        private int getTeamNumberOfDraws(int id)
+        {
+            int numOfDraws = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score == second_score
+                                OR
+                                    second_team = @id AND first_score == second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfDraws = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfDraws;
+        }
+
+        private int getTeamNumberOfWins(int id)
+        {
+            int numOfWins = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games
+                                WHERE
+                                    first_team = @id AND first_score > second_score
+                                OR
+                                    second_team = @id AND first_score < second_score";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                numOfWins = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return numOfWins;
+        }
+
+        private int getTeamNumberOfGames(int id)
+        {
+            int NumOfHomeGames = 0;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games WHERE first_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                NumOfHomeGames = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            int NumOfGuestGames = 0;
+            cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM games WHERE second_team = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                NumOfGuestGames = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return NumOfHomeGames+NumOfGuestGames;
+        }
+
+        private string getTeamNameById(int id)
+        {
+            string teamName = "unknown";
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT name FROM teams WHERE id = @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                teamName = cmd.ExecuteScalar().ToString();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return teamName;
+        }
+
+        private List<int> getTeamsIds()
+        {
+            List<int> teamIDs = new List<int>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT id FROM teams;";
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        int id = int.Parse(sqlReader["id"].ToString());
+                        teamIDs.Add(id);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            return teamIDs;
+        }
+        
+        public int getNumberOfTeams()
+        {
+            int result = -1;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count() FROM teams;";
+            try
+            {
+                result = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        public void addNewTeam(string teamName)
+        {
+            try
+            {
+                string commandText = "INSERT INTO [teams] ([id], [name]) VALUES (@id, @name)";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", null);
+                Command.Parameters.AddWithValue("@name", teamName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void deleteTeam(string teamName)
+        {
+            try
+            {
+                string commandText = "DELETE FROM [teams] WHERE name = @name";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@name", teamName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void deleteAllTeams()
+        {
+            try
+            {
+                string commandText = "DELETE FROM [teams]";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void renameTeam(string oldName, string newName)
+        {
+            try
+            {
+                string commandText = "UPDATE [teams] SET name = @newName WHERE name = @oldName";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@oldName", oldName);
+                Command.Parameters.AddWithValue("@newName", newName);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public List<GameInfo> getGamesInfo(string teamName = "")
+        {
+            List<GameInfo> result = new List<GameInfo>();
+            SQLiteCommand cmd = connection.CreateCommand();
+            if (teamName == "")
+            {
+                cmd.CommandText = @"SELECT a.id as id, b.name as first_name, c.name as second_name, a.first_score, a.second_score
+                                FROM games a
+                                LEFT JOIN teams b ON a.first_team = b.id
+                                LEFT JOIN teams c ON a.second_team = c.id";
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        GameInfo gameInfo = new GameInfo(int.Parse(sqlReader["id"].ToString()), sqlReader["first_name"].ToString(), sqlReader["second_name"].ToString(), int.Parse(sqlReader["first_score"].ToString()), int.Parse(sqlReader["second_score"].ToString()));
+                        result.Add(gameInfo);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                cmd.CommandText = @"SELECT a.id as id, b.name as first_name, c.name as second_name, a.first_score, a.second_score
+                                FROM games a
+                                LEFT JOIN teams b ON a.first_team = b.id
+                                LEFT JOIN teams c ON a.second_team = c.id
+                                WHERE b.name = @team_name OR c.name = @team_name;";
+                cmd.Parameters.AddWithValue("@team_name", teamName);
+                try
+                {
+                    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+                    while (sqlReader.Read())
+                    {
+                        GameInfo gameInfo = new GameInfo(int.Parse(sqlReader["id"].ToString()), sqlReader["first_name"].ToString(), sqlReader["second_name"].ToString(), int.Parse(sqlReader["first_score"].ToString()), int.Parse(sqlReader["second_score"].ToString()));
+                        result.Add(gameInfo);
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            return result;
+        }
+
+        public void addNewGame(string teamName1, string teamName2, int scoreTeam1, int scoreTeam2)
+        {
+            int id1 = getTeamId(teamName1);
+            int id2 = getTeamId(teamName2);
+            if(id1 == id2)
+            {
+                MessageBox.Show("Different teams must be selected");
+                return;
+            }
+            try
+            {
+                string commandText = "INSERT INTO games (first_team, second_team, first_score, second_score) VALUES (@id1, @id2, @score1, @score2)";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id1", id1);
+                Command.Parameters.AddWithValue("@id2", id2);
+                Command.Parameters.AddWithValue("@score1", scoreTeam1);
+                Command.Parameters.AddWithValue("@score2", scoreTeam2);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        int getTeamId(string teamName)
+        {
+            int result = -1;
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT id FROM teams WHERE name = @name";
+            cmd.Parameters.AddWithValue("@name", teamName);
+            try
+            {
+                result = int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return result;
+        }
+
+        public int getNumOfGames()
+        {
+            SQLiteCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"SELECT count(id) FROM teams";
+            try
+            {
+                return int.Parse(cmd.ExecuteScalar().ToString());
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return 0;
+        }
+
+        public void deleteGame(int id)
+        {
+            try
+            {
+                string commandText = "DELETE FROM [games] WHERE id = @id";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", id);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void correct(int id, string teamName1, string teamName2, int scoreTeam1, int scoreTeam2)
+        {
+            int id1 = getTeamId(teamName1);
+            int id2 = getTeamId(teamName2);
+            if (id1 == id2)
+            {
+                MessageBox.Show("Different teams must be selected");
+                return;
+            }
+            try
+            {
+                string commandText = "UPDATE games SET first_team = @id1, second_team = @id2, first_score = @score1, second_score = @score2 WHERE @id = id;";
+                SQLiteCommand Command = new SQLiteCommand(commandText, connection);
+                Command.Parameters.AddWithValue("@id", id);
+                Command.Parameters.AddWithValue("@id1", id1);
+                Command.Parameters.AddWithValue("@id2", id2);
+                Command.Parameters.AddWithValue("@score1", scoreTeam1);
+                Command.Parameters.AddWithValue("@score2", scoreTeam2);
+                Command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+    }
+
+    public class GameInfo
+    {
+        public GameInfo(int id, string teamOneName, string teamTwoName, int teamOneScore, int teamTwoScore)
+        {
+            Id = id;
+            TeamOneName = teamOneName;
+            TeamTwoName = teamTwoName;
+            TeamOneScore = teamOneScore;
+            TeamTwoScore = teamTwoScore;
+        }
+
+        public int Id { set; get; }
+        public string TeamOneName { set; get; }
+        public string TeamTwoName { set; get; }
+        public int TeamOneScore { set; get; }
+        public int TeamTwoScore { set; get; }
+    }
+
+    public class TeamInfo
+    {
+        public string name { set; get; }
+        public int numberOfGames { set; get; }
+        public int numberOfWins { set; get; }
+        public int numberOfDraws { set; get; }
+        public int numberOfLosses { set; get; }
+        public int numberOfGoalsMade { set; get; }
+        public int numberOfGoalsMissed { set; get; }
+        public int numberOfPoints { set; get; }
+    }
+}
+
+//SQLiteCommand cmd = connection.CreateCommand();
+//cmd.CommandText = @"SELECT * FROM teams;";
+//try
+//{
+//    SQLiteDataReader sqlReader = cmd.ExecuteReader();
+
+//    var columns = new List<string>();
+//    for (int i = 0; i < sqlReader.FieldCount; i++)
+//    {
+//        columns.Add(sqlReader.GetName(i));
+//    }
+
+//    listBox1.Items.Clear();
+//    while (sqlReader.Read())
+//    {
+//        string output = "";
+//        for (int i = 0; i < sqlReader.FieldCount; i++)
+//        {
+//            string colName = columns[i];                     
+//            output+=$"{colName}: {sqlReader[colName].ToString()},  ";
+//        }
+//        listBox1.Items.Add(output);
+//    }
+//}
+//catch (SQLiteException ex)
+//{
+//    MessageBox.Show(ex.Message);
+//}

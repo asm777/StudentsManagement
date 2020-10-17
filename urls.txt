@@ -1,0 +1,23 @@
+﻿How to Merge DataGridView Cell in Winforms
+https://stackoverflow.com/questions/16774966/how-to-merge-datagridview-cell-in-winforms
+
+SQLite Date & Time
+https://www.sqlitetutorial.net/sqlite-date/
+
+Can we store .doc .pdf and .jpg files in SQLite Database (Android)?
+https://stackoverflow.com/questions/29008721/can-we-store-doc-pdf-and-jpg-files-in-sqlite-database-android
+
+Upload/Display Image In Picture Box Using C#
+https://www.c-sharpcorner.com/UploadFile/mirfan00/uploaddisplay-image-in-picture-box-using-C-Sharp/
+
+How do i store and retrieve a blob from sqlite
+https://stackoverflow.com/questions/625029/how-do-i-store-and-retrieve-a-blob-from-sqlite
+
+преобразование двоичного файла в bitmap с помощью потока памяти
+https://coderoad.ru/13913353/%D0%BF%D1%80%D0%B5%D0%BE%D0%B1%D1%80%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B4%D0%B2%D0%BE%D0%B8%D1%87%D0%BD%D0%BE%D0%B3%D0%BE-%D1%84%D0%B0%D0%B9%D0%BB%D0%B0-%D0%B2-bitmap-%D1%81-%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E-%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%D0%B0-%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D0%B8
+
+Converting blob data from sql server to image in C#.NET
+http://www.codekicks.com/2009/04/converting-blob-data-from-sql-server-to.html
+
+retrieve blob picture from mysql database c#
+https://stackoverrun.com/ru/q/9841393

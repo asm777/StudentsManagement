@@ -1,0 +1,240 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace Soccer_APP
+{
+public partial class Form1 : Form
+{
+Championship championship = null;
+List<GameInfo> list = null;
+public Form1()
+{
+InitializeComponent();
+}
+
+private void Form1_Load(object sender, EventArgs e)
+{
+resizeControls();
+dataGridView1.RowHeadersVisible = false;
+}
+
+private void BtnAddTeam_Click(object sender, EventArgs e)
+{
+if(championship != null)
+{
+championship.addNewGame(comboBoxTeam1.Text, comboBoxTeam2.Text, (int)numericUpDownScore1.Value, (int)numericUpDownScore2.Value);
+comboBoxTeamFilter.SelectedIndex = comboBoxTeam1.SelectedIndex;
+showGames();
+refresh();
+}
+//if (championship != null)
+//{
+// var games = championship.getGamesInfo();
+//}
+}
+
+private void textBoxTeamName_TextChanged(object sender, EventArgs e)
+{
+
+}
+
+private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+{
+//Connector.Dispose();
+}
+
+private void openChampionshipToolStripMenuItem_Click(object sender, EventArgs e)
+{
+if (openFileDialog1.ShowDialog() == DialogResult.OK)
+{
+championship = new Championship(openFileDialog1.FileName);
+Init();
+}
+}
+
+private void teamsToolStripMenuItem_Click(object sender, EventArgs e)
+{
+TeamEditorForm form = new TeamEditorForm();
+form.championship = this.championship;
+form.ShowDialog();
+}
+
+private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+{
+Close();
+}
+
+private void newChampionshipToolStripMenuItem_Click(object sender, EventArgs e)
+{
+if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+{
+Championship.createDB(saveFileDialog1.FileName);
+championship = new Championship(saveFileDialog1.FileName);
+
+}
+}
+
+private void Form1_Activated(object sender, EventArgs e)
+{
+Init();
+}
+
+private void Init()
+{
+comboBoxTeam1.Items.Clear();
+comboBoxTeam2.Items.Clear();
+comboBoxTeamFilter.Items.Clear();
+if (championship != null)
+{
+List<string> teams = championship.getTeamNamesList();
+comboBoxTeam1.Items.AddRange(teams.ToArray());
+comboBoxTeam2.Items.AddRange(teams.ToArray());
+comboBoxTeamFilter.Items.AddRange(teams.ToArray());
+comboBoxTeam1.SelectedIndex = 0;
+comboBoxTeam2.SelectedIndex = 0;
+comboBoxTeamFilter.SelectedIndex = 0;
+showGames();
+int numOfTeams = championship.getNumberOfTeams();
+dataGridView1.RowCount = numOfTeams;
+refresh();
+}
+}
+
+private void Form1_Resize(object sender, EventArgs e)
+{
+resizeControls();
+}
+
+private void resizeControls()
+{
+listBox2.Height = BtnCLose.Top - listBox2.Top - 10;
+listBox2.Left = dataGridView1.Left + dataGridView1.Width + 10;
+int width = BtnCLose.Left + BtnCLose.Width - listBox2.Left;
+listBox2.Width = width;
+dataGridView1.Height = BtnCLose.Top + BtnCLose.Height - dataGridView1.Top;
+}
+
+private void BtnCLose_Click(object sender, EventArgs e)
+{
+Close();
+}
+
+//private void buttonShowGames_Click(object sender, EventArgs e)
+//{
+// showGames();
+//}
+
+private void showGames() {
+if (championship != null)
+{
+int count = championship.getNumOfGames();
+if (checkBoxFilter.Checked)
+{
+list = championship.getGamesInfo(comboBoxTeamFilter.Text);
+}
+else
+{
+list = championship.getGamesInfo();
+}
+listBox2.Items.Clear();
+foreach (GameInfo game in list)
+{
+string teamOne = game.TeamOneName;
+int scoreOne = game.TeamOneScore;
+string teamTwo = game.TeamTwoName;
+int scoreTwo = game.TeamTwoScore;
+string S = teamOne + ": " + scoreOne + " - " + teamTwo + ": " + scoreTwo;
+listBox2.Items.Add(S);
+}
+}
+else MessageBox.Show("Championship not open");
+}
+
+private void buttonDeleteGame_Click(object sender, EventArgs e)
+{
+int idx = listBox2.SelectedIndex;
+if (idx != -1)
+{
+int id = list[idx].Id;
+championship.deleteGame(id);
+showGames();
+refresh();
+}
+}
+
+private void listBox2_SelectedValueChanged(object sender, EventArgs e)
+{
+if (listBox2.SelectedIndex != -1)
+{
+comboBoxTeam1.Text = list[listBox2.SelectedIndex].TeamOneName;
+comboBoxTeam2.Text = list[listBox2.SelectedIndex].TeamTwoName;
+numericUpDownScore1.Value = list[listBox2.SelectedIndex].TeamOneScore;
+numericUpDownScore2.Value = list[listBox2.SelectedIndex].TeamTwoScore;
+}
+else
+{
+comboBoxTeam1.SelectedIndex = 0;
+comboBoxTeam2.SelectedIndex = 0;
+numericUpDownScore1.Value = 0;
+numericUpDownScore2.Value = 0;
+}
+}
+
+private void buttonCorrect_Click(object sender, EventArgs e)
+{
+int idx = listBox2.SelectedIndex;
+if (idx != -1)
+{
+int id = list[idx].Id;
+championship.correct(id, comboBoxTeam1.Text, comboBoxTeam2.Text, (int)numericUpDownScore1.Value, (int)numericUpDownScore2.Value);
+showGames();
+refresh();
+}
+}
+
+private void comboBoxTeamFilter_SelectedIndexChanged(object sender, EventArgs e)
+{
+showGames();
+}
+
+private void checkBoxFilter_CheckedChanged(object sender, EventArgs e)
+{
+showGames();
+}
+
+private void buttonTest_Click(object sender, EventArgs e)
+{
+refresh();
+}
+
+private void refresh()
+{
+if(championship == null)
+{
+MessageBox.Show("Championship not open");
+return;
+}
+List<TeamInfo> list = championship.getFullTeamsInfo();
+for (int i = 0; i < list.Count(); i++)
+{
+dataGridView1.Rows[i].Cells[0].Value = list[i].name;
+dataGridView1.Rows[i].Cells[1].Value = list[i].numberOfGames;
+dataGridView1.Rows[i].Cells[2].Value = list[i].numberOfWins;
+dataGridView1.Rows[i].Cells[3].Value = list[i].numberOfDraws;
+dataGridView1.Rows[i].Cells[4].Value = list[i].numberOfLosses;
+dataGridView1.Rows[i].Cells[5].Value = list[i].numberOfGoalsMade;
+dataGridView1.Rows[i].Cells[6].Value = list[i].numberOfGoalsMissed;
+dataGridView1.Rows[i].Cells[7].Value = list[i].numberOfPoints;
+}
+}
+}
+}
