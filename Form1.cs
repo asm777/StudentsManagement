@@ -28,6 +28,7 @@ namespace StudentsManagement
                 //Close();
             }
             InitializeComponent();
+            TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager();
         }
 
         private void Form1_Activated(object sender, EventArgs e)

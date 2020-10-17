@@ -9,20 +9,92 @@ namespace StudentsManagement
 {
     public class TimeTableActiveTilesManager
     {
+        public List<Tile> tiles { get; }
+
         public TimeTableActiveTilesManager()
         {
             tiles = new List<Tile>();
+            KeyDate = DateTime.Now;
         }
 
-        public List<Tile> tiles { get; }
-        public DateTime keyDate { set/*Todo:  calcTiles()*/; get; }
+        private DateTime keyDate;
+        public DateTime KeyDate { 
+            set {
+                keyDate = value;
+                TilesGenerate();
+            } 
+            get {
+                return keyDate;
+            } 
+        }
 
         public void calcTiles()
         {
             tiles.Clear();
             //Todo: fill tiles.
         }
+
+        private void TilesGenerate()
+        {
+            //Looking for startDate
+            DateTime startDate = KeyDate;
+            int numberOfMon = 0;
+            while (true)
+            {
+                if (startDate.DayOfWeek == DayOfWeek.Monday)
+                {
+                    numberOfMon++;
+                    if (numberOfMon == 2)
+                    {
+                        break;
+                    }
+                }
+                startDate = startDate.AddDays(-1);
+            }
+
+            //Looking for finishDate
+            DateTime finishDate = KeyDate;
+            int numberOfSun = 0;
+            while (true)
+            {
+                if (finishDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    numberOfSun++;
+                    if (numberOfSun == 2)
+                    {
+                        break;
+                    }
+                }
+                finishDate = finishDate.AddDays(+1);
+            }
+
+            DateTime date = startDate;
+            int baseLeft = 10;
+            int tileWidth = 49;
+            int betweenTiles = 1;
+            int baseTop = 20;
+            int tileHeight = 6;
+            for (int day=0; day<21; day++) //Three weeks
+            {
+                for (int unit = 0; unit < 24 * 4; unit++)
+                { //for possible lesson unit per hour
+                    Tile tile = new Tile();
+                    
+                    tile.left = baseLeft + day * (tileWidth + betweenTiles);
+                    tile.width = tileWidth;
+
+                    tile.top = baseTop + unit * (tileHeight + betweenTiles);
+                    tile.height = tileHeight;
+
+                    //tile.text = ????
+
+                    tiles.Add(tile);
+                }
+            }
+        }
+
     }
+
 
     public class Tile
     {
@@ -44,3 +116,23 @@ namespace StudentsManagement
         public string text { set; get; }
     }
 }
+
+
+//DateTime startDate1 = () =>
+//{
+//    DateTime strtDat = KeyDate;
+//    int numberOfMon = 0;
+//    while (true)
+//    {
+//        if (strtDat.DayOfWeek == DayOfWeek.Monday)
+//        {
+//            numberOfMon++;
+//            if (numberOfMon == 2)
+//            {
+//                break;
+//            }
+//        }
+//        strtDat = strtDat.AddDays(-1);
+//    }
+//    return strtDat;
+//}
