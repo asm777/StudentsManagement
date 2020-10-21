@@ -103,7 +103,6 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="iGrid Sample VB.resx" />
     <EmbeddedResource Include="LessonsForm.resx">
       <DependentUpon>LessonsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -137,8 +136,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="iGrid Sample VB.Designer.vb" />
-    <Content Include="iGrid Sample VB.vb" />
     <Content Include="TextFile1.txt" />
     <Content Include="task.txt" />
     <Content Include="TextFile2.txt" />

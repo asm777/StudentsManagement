@@ -1,0 +1,25 @@
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\StudentsManagement.exe.config
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\StudentsManagement.exe
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\StudentsManagement.pdb
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.csprojAssemblyReference.cache
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.Form1.resources
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.Properties.Resources.resources
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.csproj.GenerateResource.cache
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.csproj.CoreCompileInputs.cache
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.exe
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.pdb
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\EntityFramework.dll
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.dll
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\EntityFramework.xml
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.xml
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.csproj.CopyComplete
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.StudentsForm.resources
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.iGrid Sample VB.resources
+C:\Users\user01\source\repos\StudentsManagement\bin\Debug\TenTec.Windows.iGridLib.iGrid.v4.6.dll
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.SubjectsForm.resources
+C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.LessonsForm.resources
