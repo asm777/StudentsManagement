@@ -75,5 +75,10 @@ namespace StudentsManagement
             LessonsForm form = new LessonsForm(dbPath);
             form.ShowDialog();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Hello there!");
+        }
     }
 }
