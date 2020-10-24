@@ -28,12 +28,6 @@ namespace StudentsManagement
             } 
         }
 
-        public void calcTiles()
-        {
-            tiles.Clear();
-            //Todo: fill tiles.
-        }
-
         private void TilesGenerate()
         {
             //Looking for startDate
@@ -69,11 +63,12 @@ namespace StudentsManagement
             }
 
             DateTime date = startDate;
-            int baseLeft = 10;
+            int baseLeft = 40;
             int tileWidth = 49;
             int betweenTiles = 1;
-            int baseTop = 20;
+            int baseTop = 60;
             int tileHeight = 6;
+            tiles.Clear();
             for (int day=0; day<21; day++) //Three weeks
             {
                 for (int unit = 0; unit < 24 * 4; unit++)

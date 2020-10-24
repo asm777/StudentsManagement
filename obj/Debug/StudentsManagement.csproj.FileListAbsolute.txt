@@ -19,7 +19,6 @@ C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.xml
 C:\Users\user01\source\repos\StudentsManagement\bin\Debug\System.Data.SQLite.dll.config
 C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.csproj.CopyComplete
 C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.StudentsForm.resources
-C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.iGrid Sample VB.resources
 C:\Users\user01\source\repos\StudentsManagement\bin\Debug\TenTec.Windows.iGridLib.iGrid.v4.6.dll
 C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.SubjectsForm.resources
 C:\Users\user01\source\repos\StudentsManagement\obj\Debug\StudentsManagement.LessonsForm.resources

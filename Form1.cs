@@ -16,6 +16,7 @@ namespace StudentsManagement
 
         private string dbPath = @"C:\Users\user01\source\repos\StudentsManagement\students.db";
         Management management;
+        List<Button> tilesButtons;
         public Form1()
         {
             try
@@ -28,28 +29,48 @@ namespace StudentsManagement
                 //Close();
             }
             InitializeComponent();
+            tilesButtons = getTilesButtonsList();
+        }
+
+        private List<Button> getTilesButtonsList()
+        {
+            List<Button> tilesButtons = new List<Button>();
+            int n = this.Controls.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Control control = this.Controls[i];
+                if (control is Button)
+                {
+                    Button button = (Button)control;
+                    if (button.Text.Equals("*"))
+                    {
+                        tilesButtons.Add(button);
+                    }
+                }
+            }
+            return tilesButtons;
+        }
+
+        private void RefreshTilesButtons()
+        {
             TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager();
+            int n = timeTableActiveTilesManager.tiles.Count;
+//TODO
+            //for (int i=0; i<n; i++)
+            //{
+            //    Tile tile = timeTableActiveTilesManager.tiles[i];
+            //    Button tileButton = tilesButtons[i];
+            //    tileButton.Text = tile.text;
+            //    tileButton.Top = tile.top;
+            //    tileButton.Left = tile.left;
+            //    tileButton.Width = tile.width;
+            //    tileButton.Height = tile.height;
+            //}
         }
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            RestructGreed();
-        }
-
-        private void RestructGreed()
-        {
-            //dataGridViewTimeTable.RowCount = 97;
-            //dataGridViewTimeTable.ColumnCount = 22;
-            //for (int i = 0; i< dataGridViewTimeTable.ColumnCount; i++)
-            //{
-            //    DataGridViewColumn column = dataGridViewTimeTable.Columns[i];
-            //    column.Width = 50;
-            //}
-           
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            //dataGridViewTimeTable.RowTemplate.Height = 7;
+            RefreshTilesButtons();
         }
 
         private void buttonStudents_Click(object sender, EventArgs e)
@@ -76,9 +97,5 @@ namespace StudentsManagement
             form.ShowDialog();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Hello there!");
-        }
     }
 }

@@ -36,15 +36,17 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.buttonSubjects = new System.Windows.Forms.Button();
             this.buttonLessons = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonStudents
             // 
-            this.buttonStudents.Location = new System.Drawing.Point(339, 15);
-            this.buttonStudents.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonStudents.Location = new System.Drawing.Point(254, 12);
             this.buttonStudents.Name = "buttonStudents";
-            this.buttonStudents.Size = new System.Drawing.Size(100, 28);
+            this.buttonStudents.Size = new System.Drawing.Size(75, 23);
             this.buttonStudents.TabIndex = 1;
             this.buttonStudents.Text = "Students";
             this.buttonStudents.UseVisualStyleBackColor = true;
@@ -52,40 +54,36 @@
             // 
             // buttonScrollWeekBack
             // 
-            this.buttonScrollWeekBack.Location = new System.Drawing.Point(17, 16);
-            this.buttonScrollWeekBack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonScrollWeekBack.Location = new System.Drawing.Point(13, 13);
             this.buttonScrollWeekBack.Name = "buttonScrollWeekBack";
-            this.buttonScrollWeekBack.Size = new System.Drawing.Size(100, 28);
+            this.buttonScrollWeekBack.Size = new System.Drawing.Size(75, 23);
             this.buttonScrollWeekBack.TabIndex = 2;
             this.buttonScrollWeekBack.Text = "<<";
             this.buttonScrollWeekBack.UseVisualStyleBackColor = true;
             // 
             // buttonScrollWeekForward
             // 
-            this.buttonScrollWeekForward.Location = new System.Drawing.Point(1199, 16);
-            this.buttonScrollWeekForward.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonScrollWeekForward.Location = new System.Drawing.Point(899, 13);
             this.buttonScrollWeekForward.Name = "buttonScrollWeekForward";
-            this.buttonScrollWeekForward.Size = new System.Drawing.Size(100, 28);
+            this.buttonScrollWeekForward.Size = new System.Drawing.Size(75, 23);
             this.buttonScrollWeekForward.TabIndex = 3;
             this.buttonScrollWeekForward.Text = ">>";
             this.buttonScrollWeekForward.UseVisualStyleBackColor = true;
             // 
             // buttonScrollDayBack
             // 
-            this.buttonScrollDayBack.Location = new System.Drawing.Point(125, 16);
-            this.buttonScrollDayBack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonScrollDayBack.Location = new System.Drawing.Point(94, 13);
             this.buttonScrollDayBack.Name = "buttonScrollDayBack";
-            this.buttonScrollDayBack.Size = new System.Drawing.Size(100, 28);
+            this.buttonScrollDayBack.Size = new System.Drawing.Size(75, 23);
             this.buttonScrollDayBack.TabIndex = 4;
             this.buttonScrollDayBack.Text = "<";
             this.buttonScrollDayBack.UseVisualStyleBackColor = true;
             // 
             // buttonScrollDayForward
             // 
-            this.buttonScrollDayForward.Location = new System.Drawing.Point(1091, 16);
-            this.buttonScrollDayForward.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonScrollDayForward.Location = new System.Drawing.Point(818, 13);
             this.buttonScrollDayForward.Name = "buttonScrollDayForward";
-            this.buttonScrollDayForward.Size = new System.Drawing.Size(100, 28);
+            this.buttonScrollDayForward.Size = new System.Drawing.Size(75, 23);
             this.buttonScrollDayForward.TabIndex = 5;
             this.buttonScrollDayForward.Text = ">";
             this.buttonScrollDayForward.UseVisualStyleBackColor = true;
@@ -93,18 +91,16 @@
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(740, 20);
-            this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker1.Location = new System.Drawing.Point(555, 16);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(265, 22);
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
             this.dateTimePicker1.TabIndex = 6;
             // 
             // buttonSubjects
             // 
-            this.buttonSubjects.Location = new System.Drawing.Point(447, 15);
-            this.buttonSubjects.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonSubjects.Location = new System.Drawing.Point(335, 12);
             this.buttonSubjects.Name = "buttonSubjects";
-            this.buttonSubjects.Size = new System.Drawing.Size(100, 28);
+            this.buttonSubjects.Size = new System.Drawing.Size(75, 23);
             this.buttonSubjects.TabIndex = 7;
             this.buttonSubjects.Text = "Subjects";
             this.buttonSubjects.UseVisualStyleBackColor = true;
@@ -112,31 +108,59 @@
             // 
             // buttonLessons
             // 
-            this.buttonLessons.Location = new System.Drawing.Point(555, 15);
-            this.buttonLessons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonLessons.Location = new System.Drawing.Point(416, 12);
             this.buttonLessons.Name = "buttonLessons";
-            this.buttonLessons.Size = new System.Drawing.Size(100, 28);
+            this.buttonLessons.Size = new System.Drawing.Size(75, 23);
             this.buttonLessons.TabIndex = 8;
             this.buttonLessons.Text = "Lessons";
             this.buttonLessons.UseVisualStyleBackColor = true;
             this.buttonLessons.Click += new System.EventHandler(this.buttonLessons_Click);
             // 
-            // label1
+            // button1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(447, 257);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.button1.Location = new System.Drawing.Point(80, 73);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(49, 6);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "*";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(80, 80);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(49, 6);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "*";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(80, 94);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(49, 6);
+            this.button3.TabIndex = 12;
+            this.button3.Text = "*";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(80, 87);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(49, 6);
+            this.button4.TabIndex = 11;
+            this.button4.Text = "*";
+            this.button4.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1339, 764);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(1168, 678);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonLessons);
             this.Controls.Add(this.buttonSubjects);
             this.Controls.Add(this.dateTimePicker1);
@@ -145,13 +169,10 @@
             this.Controls.Add(this.buttonScrollWeekForward);
             this.Controls.Add(this.buttonScrollWeekBack);
             this.Controls.Add(this.buttonStudents);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Activated += new System.EventHandler(this.Form1_Activated);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -164,7 +185,10 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Button buttonSubjects;
         private System.Windows.Forms.Button buttonLessons;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 
