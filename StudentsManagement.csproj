@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionsKeeper.cs" />
+    <Compile Include="Diapazon.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +101,7 @@
     </Compile>
     <Compile Include="SubjectsListManager.cs" />
     <Compile Include="TimeTableActiveTilesManager.cs" />
+    <Compile Include="Tools.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

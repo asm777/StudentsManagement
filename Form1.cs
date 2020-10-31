@@ -17,6 +17,7 @@ namespace StudentsManagement
         private string dbPath = @"C:\Users\user01\source\repos\StudentsManagement\students.db";
         Management management;
         List<Button> tilesButtons;
+        List<Label> datesLabels;
         public Form1()
         {
             try
@@ -30,6 +31,29 @@ namespace StudentsManagement
             }
             InitializeComponent();
             tilesButtons = getTilesButtonsList();
+            datesLabels = getDatesLabels();
+        }
+
+        private List<Label> getDatesLabels()
+        {
+            List<Label> datesLabels = new List<Label>();
+            int n = this.Controls.Count;
+            for (int i = 0; i < n; i++)
+            {
+                Control control = this.Controls[i];
+                if (control is Label)
+                {
+                    Label label = (Label)control;
+                    if (label.Text.Equals("*"))
+                    {
+                        datesLabels.Add(label);
+                    }
+                }
+            }
+
+            List<Label> SortedList = datesLabels.OrderBy(l => l.Left).ToList();
+
+            return SortedList;
         }
 
         private List<Button> getTilesButtonsList()
@@ -51,11 +75,12 @@ namespace StudentsManagement
             return tilesButtons;
         }
 
-        private void RefreshTilesButtons()
+        private void RefreshTilesTimeTable()
         {
-            TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager();
+            TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager(dateTimePicker1.Value);
+
             int n = timeTableActiveTilesManager.tiles.Count;
-//TODO
+            //TODO
             //for (int i=0; i<n; i++)
             //{
             //    Tile tile = timeTableActiveTilesManager.tiles[i];
@@ -66,11 +91,24 @@ namespace StudentsManagement
             //    tileButton.Width = tile.width;
             //    tileButton.Height = tile.height;
             //}
+
+            Diapazon diapazon = new Diapazon(dateTimePicker1.Value);
+            for (int i = 0; i < datesLabels.Count; i++)
+            {
+                DateTime current = diapazon[i];
+                string s = current.ToString("dd/MM");
+                datesLabels[i].Text = s;
+                datesLabels[i].ForeColor = Color.Black;
+                if (current.Day== dateTimePicker1.Value.Day)
+                {
+                    datesLabels[i].ForeColor = Color.DarkOrange;
+                }
+            }
         }
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            RefreshTilesButtons();
+            RefreshTilesTimeTable();
         }
 
         private void buttonStudents_Click(object sender, EventArgs e)
@@ -87,8 +125,8 @@ namespace StudentsManagement
 
         private void buttonScrollDayForward_Click(object sender, EventArgs e)
         {
-            LessonsListManager lessonsListManager = new LessonsListManager(dbPath);
-            lessonsListManager.getLessonsList();
+            DateTime current = dateTimePicker1.Value.AddDays(-7);
+            dateTimePicker1.Value = current;
         }
 
         private void buttonLessons_Click(object sender, EventArgs e)
@@ -97,5 +135,29 @@ namespace StudentsManagement
             form.ShowDialog();
         }
 
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshTilesTimeTable();
+        }
+
+        private void buttonScrollWeekBack_Click(object sender, EventArgs e)
+        {
+            DateTime current = dateTimePicker1.Value.AddDays(-7);
+            dateTimePicker1.Value = current;
+        }
+
+        private void buttonScrollMonthBack_Click(object sender, EventArgs e)
+        {
+            DateTime current = dateTimePicker1.Value.AddMonths(-1);
+            dateTimePicker1.Value = current;
+        }
+
+        private void buttonScrollMonthForward_Click(object sender, EventArgs e)
+        {
+            DateTime current = dateTimePicker1.Value.AddMonths(1);
+            dateTimePicker1.Value = current;
+        }
     }
 }
+
+

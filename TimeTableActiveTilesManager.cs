@@ -11,10 +11,10 @@ namespace StudentsManagement
     {
         public List<Tile> tiles { get; }
 
-        public TimeTableActiveTilesManager()
+        public TimeTableActiveTilesManager(DateTime keyDate)
         {
             tiles = new List<Tile>();
-            KeyDate = DateTime.Now;
+            KeyDate = keyDate;
         }
 
         private DateTime keyDate;
@@ -30,37 +30,10 @@ namespace StudentsManagement
 
         private void TilesGenerate()
         {
-            //Looking for startDate
-            DateTime startDate = KeyDate;
-            int numberOfMon = 0;
-            while (true)
-            {
-                if (startDate.DayOfWeek == DayOfWeek.Monday)
-                {
-                    numberOfMon++;
-                    if (numberOfMon == 2)
-                    {
-                        break;
-                    }
-                }
-                startDate = startDate.AddDays(-1);
-            }
-
-            //Looking for finishDate
-            DateTime finishDate = KeyDate;
-            int numberOfSun = 0;
-            while (true)
-            {
-                if (finishDate.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    numberOfSun++;
-                    if (numberOfSun == 2)
-                    {
-                        break;
-                    }
-                }
-                finishDate = finishDate.AddDays(+1);
-            }
+            //Looking for startDate and finishDate
+            Diapazon diapazon = new Diapazon(KeyDate);
+            DateTime startDate = diapazon.startDate;
+            DateTime finishDate = diapazon.finishDate;
 
             DateTime date = startDate;
             int baseLeft = 40;
