@@ -10,9 +10,11 @@ namespace StudentsManagement
     public class TimeTableActiveTilesManager
     {
         public List<Tile> tiles { get; }
+        string dbPath;
 
-        public TimeTableActiveTilesManager(DateTime keyDate)
+        public TimeTableActiveTilesManager(DateTime keyDate, string dbPath)
         {
+            this.dbPath = dbPath;
             tiles = new List<Tile>();
             KeyDate = keyDate;
         }
@@ -54,10 +56,30 @@ namespace StudentsManagement
                     tile.top = baseTop + unit * (tileHeight + betweenTiles);
                     tile.height = tileHeight;
 
-                    //tile.text = ????
+                    //tile.text = "Tile"
 
                     tiles.Add(tile);
                 }
+            }
+
+            LessonsListManager lessonsListManager = new LessonsListManager(dbPath);
+            List<LessonInfo> lessonInfos = lessonsListManager.getLessonsList(startDate, finishDate);
+
+            for (int i=0; i<lessonInfos.Count; i++)
+            {
+                LessonInfo lessonInfo = lessonInfos[i];
+
+                int tileNum = 0;
+                DateTime lessonDateTime = startDate;
+                while (lessonDateTime < lessonInfo.DateAndTime)
+                {
+                    lessonDateTime = lessonDateTime.AddMinutes(15); //***
+                    tileNum++;
+                }
+
+                tiles[tileNum].height = lessonInfo.duration * tileHeight + (lessonInfo.duration - 1) * betweenTiles;
+                tiles[tileNum].text = lessonInfo.studentInfo.name;
+                //TO DO asign tile color
             }
         }
 

@@ -77,21 +77,23 @@ namespace StudentsManagement
 
         private void RefreshTilesTimeTable()
         {
-            TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager(dateTimePicker1.Value);
+            //Менеджер плиток лезет в БД и получает список уроков за отображаемый период
+            //Дальше менеджер настраивает плитки: нужным плиткам устанавливается размер в соотвествии
+            //с длиной урока. В плитку вписывается имя студента. Цвет плитки выбирается в зависимости от
+            //дополнительных условий(урок запланирован, проведён, оплачен)
+            DateTime dateTime = dateTimePicker1.Value;
+            TimeTableActiveTilesManager timeTableActiveTilesManager = new TimeTableActiveTilesManager(dateTime, dbPath);
 
             int n = timeTableActiveTilesManager.tiles.Count;
             //TODO
-            //for (int i=0; i<n; i++)
-            //{
-            //    Tile tile = timeTableActiveTilesManager.tiles[i];
-            //    Button tileButton = tilesButtons[i];
-            //    tileButton.Text = tile.text;
-            //    tileButton.Top = tile.top;
-            //    tileButton.Left = tile.left;
-            //    tileButton.Width = tile.width;
-            //    tileButton.Height = tile.height;
-            //}
+            for (int i = 0; i < n; i++)
+            {
+                Tile tile = timeTableActiveTilesManager.tiles[i];
+                //TODO  Настройка кнопок, что бы их цвет, размеры и надписи соответствовали
+                //соответствующим плиткам
+            }
 
+            //Проставляем вверху даты
             Diapazon diapazon = new Diapazon(dateTimePicker1.Value);
             for (int i = 0; i < datesLabels.Count; i++)
             {

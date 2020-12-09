@@ -8,8 +8,8 @@ namespace StudentsManagement
 {
     class Diapazon
     {
-        public DateTime startDate { get; }
-        public DateTime finishDate { get; }
+        public DateTime startDate { get; private set; }
+        public DateTime finishDate { get; private set; }
         public Diapazon(DateTime keyDate)
         {
             //Looking for startDate
@@ -43,6 +43,14 @@ namespace StudentsManagement
                 }
                 finishDate = finishDate.AddDays(+1);
             }
+            int d = startDate.Day;
+            int m = startDate.Month;
+            int y = startDate.Year;
+            startDate = new DateTime(y, m, d, 0, 0, 0);
+            d = finishDate.Day;
+            m = finishDate.Month;
+            y = finishDate.Year;
+            finishDate = new DateTime(y, m, d, 0, 0, 0);
         }
 
         public DateTime this[int i]

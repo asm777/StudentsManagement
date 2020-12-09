@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace StudentsManagement
 {
@@ -51,8 +52,10 @@ namespace StudentsManagement
             //---------------------------------------------
 
             cmd.CommandText = query;
-            cmd.Parameters.AddWithValue("@from", from.ToString(@"yyyy/MM/dd/ hh:mm:ss"));
-            cmd.Parameters.AddWithValue("@to", to.ToString(@"yyyy/MM/dd/ hh:mm:ss"));
+            string fromS = from.ToString(@"yyyy/MM/dd HH:mm:ss");
+            string toS = to.ToString(@"yyyy/MM/dd HH:mm:ss");
+            cmd.Parameters.AddWithValue("@from", fromS);
+            cmd.Parameters.AddWithValue("@to", toS);
 
             SQLiteDataReader sqlReader = cmd.ExecuteReader();
 
