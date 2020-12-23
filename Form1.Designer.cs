@@ -2148,9 +2148,10 @@
             // 
             // dateTimePicker1
             // 
+            this.dateTimePicker1.CustomFormat = "yyyy/MM/dd";
             this.dateTimePicker1.Location = new System.Drawing.Point(664, 15);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePicker1.Size = new System.Drawing.Size(222, 20);
             this.dateTimePicker1.TabIndex = 6;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
@@ -2166,12 +2167,13 @@
             // 
             // buttonLessons
             // 
+            this.buttonLessons.BackColor = System.Drawing.SystemColors.Control;
             this.buttonLessons.Location = new System.Drawing.Point(525, 11);
             this.buttonLessons.Name = "buttonLessons";
             this.buttonLessons.Size = new System.Drawing.Size(75, 23);
             this.buttonLessons.TabIndex = 8;
             this.buttonLessons.Text = "Lessons";
-            this.buttonLessons.UseVisualStyleBackColor = true;
+            this.buttonLessons.UseVisualStyleBackColor = false;
             this.buttonLessons.Click += new System.EventHandler(this.buttonLessons_Click);
             // 
             // button1
@@ -14273,6 +14275,7 @@
             // button1345
             // 
             this.button1345.Location = new System.Drawing.Point(1142, 730);
+            this.button1345.Margin = new System.Windows.Forms.Padding(1, 3, 1, 3);
             this.button1345.Name = "button1345";
             this.button1345.Size = new System.Drawing.Size(49, 6);
             this.button1345.TabIndex = 2024;

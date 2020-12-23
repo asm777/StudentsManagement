@@ -40,7 +40,8 @@ namespace StudentsManagement
             DateTime date = startDate;
             int baseLeft = 40;
             int tileWidth = 49;
-            int betweenTiles = 1;
+            int betweenTilesV = 1;
+            int betweenTilesH = 7;
             int baseTop = 60;
             int tileHeight = 6;
             tiles.Clear();
@@ -50,13 +51,18 @@ namespace StudentsManagement
                 { //for possible lesson unit per hour
                     Tile tile = new Tile();
                     
-                    tile.left = baseLeft + day * (tileWidth + betweenTiles);
+                    tile.left = baseLeft + day * (tileWidth + betweenTilesH);
                     tile.width = tileWidth;
 
-                    tile.top = baseTop + unit * (tileHeight + betweenTiles);
+                    tile.top = baseTop + unit * (tileHeight + betweenTilesV);
                     tile.height = tileHeight;
 
                     //tile.text = "Tile"
+                    bool isEvenHour = unit / 4 % 2 == 0;
+                    if (isEvenHour)
+                    {
+                        tile.color = Color.LightSeaGreen;
+                    }
 
                     tiles.Add(tile);
                 }
@@ -77,9 +83,10 @@ namespace StudentsManagement
                     tileNum++;
                 }
 
-                tiles[tileNum].height = lessonInfo.duration * tileHeight + (lessonInfo.duration - 1) * betweenTiles;
+                tiles[tileNum].height = lessonInfo.duration * tileHeight + (lessonInfo.duration - 1) * betweenTilesV;
                 tiles[tileNum].text = lessonInfo.studentInfo.name;
-                //TO DO asign tile color
+                tiles[tileNum].color = Color.LightGreen;
+                tiles[tileNum].free = false;
             }
         }
 
@@ -94,8 +101,9 @@ namespace StudentsManagement
             top = 0;
             width = 0;
             height = 0;
-            color = Color.LightGreen;
+            color = Color.Gray;
             text = "free";
+            free = true;
         }
 
         public int left { set; get; }
@@ -104,6 +112,7 @@ namespace StudentsManagement
         public int height { set; get; }
         public Color color { set; get; }
         public string text { set; get; }
+        public bool free { set; get; }
     }
 }
 

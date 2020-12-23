@@ -32,6 +32,7 @@ namespace StudentsManagement
             InitializeComponent();
             tilesButtons = getTilesButtonsList();
             datesLabels = getDatesLabels();
+            button1.BackColor = Color.Yellow;
         }
 
         private List<Label> getDatesLabels()
@@ -88,9 +89,24 @@ namespace StudentsManagement
             //TODO
             for (int i = 0; i < n; i++)
             {
+                //ToDO: работать только с теми плитками, кторіе изменились.
                 Tile tile = timeTableActiveTilesManager.tiles[i];
                 //TODO  Настройка кнопок, что бы их цвет, размеры и надписи соответствовали
                 //соответствующим плиткам
+
+                tilesButtons[i].Left = tile.left;
+                tilesButtons[i].Height = tile.height;
+                tilesButtons[i].BackColor = tile.color;
+                tilesButtons[i].FlatStyle = FlatStyle.Flat;
+                tilesButtons[i].FlatAppearance.BorderColor = tile.color;
+                tilesButtons[i].Text = tile.text;
+
+                if (!tile.free)
+                {
+                    tilesButtons[i].FlatStyle = FlatStyle.Flat;
+                    tilesButtons[i].FlatAppearance.BorderColor = tile.color;
+                    tilesButtons[i].BringToFront();
+                }
             }
 
             //Проставляем вверху даты
@@ -127,7 +143,7 @@ namespace StudentsManagement
 
         private void buttonScrollDayForward_Click(object sender, EventArgs e)
         {
-            DateTime current = dateTimePicker1.Value.AddDays(-7);
+            DateTime current = dateTimePicker1.Value.AddDays(+7);
             dateTimePicker1.Value = current;
         }
 
@@ -156,7 +172,7 @@ namespace StudentsManagement
 
         private void buttonScrollMonthForward_Click(object sender, EventArgs e)
         {
-            DateTime current = dateTimePicker1.Value.AddMonths(1);
+            DateTime current = dateTimePicker1.Value.AddMonths(+1);
             dateTimePicker1.Value = current;
         }
     }

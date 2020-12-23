@@ -50,6 +50,10 @@
             this.buttonDelAllLessons = new System.Windows.Forms.Button();
             this.buttonModify = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.comboBoxHour = new System.Windows.Forms.ComboBox();
+            this.comboBoxMin = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPrice)).BeginInit();
             this.SuspendLayout();
@@ -74,6 +78,8 @@
             // 
             // dateTimePicker
             // 
+            this.dateTimePicker.CustomFormat = "yyyy/MM/dd";
+            this.dateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker.Location = new System.Drawing.Point(445, 24);
             this.dateTimePicker.Name = "dateTimePicker";
             this.dateTimePicker.Size = new System.Drawing.Size(200, 20);
@@ -81,7 +87,7 @@
             // 
             // numericUpDownDuration
             // 
-            this.numericUpDownDuration.Location = new System.Drawing.Point(563, 70);
+            this.numericUpDownDuration.Location = new System.Drawing.Point(563, 139);
             this.numericUpDownDuration.Minimum = new decimal(new int[] {
             1,
             0,
@@ -99,7 +105,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(445, 72);
+            this.label2.Location = new System.Drawing.Point(445, 141);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 13);
             this.label2.TabIndex = 4;
@@ -108,7 +114,7 @@
             // comboBoxStudentsNames
             // 
             this.comboBoxStudentsNames.FormattingEnabled = true;
-            this.comboBoxStudentsNames.Location = new System.Drawing.Point(448, 132);
+            this.comboBoxStudentsNames.Location = new System.Drawing.Point(448, 177);
             this.comboBoxStudentsNames.Name = "comboBoxStudentsNames";
             this.comboBoxStudentsNames.Size = new System.Drawing.Size(197, 21);
             this.comboBoxStudentsNames.TabIndex = 5;
@@ -116,7 +122,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(445, 116);
+            this.label3.Location = new System.Drawing.Point(445, 161);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 6;
@@ -125,7 +131,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(445, 171);
+            this.label4.Location = new System.Drawing.Point(445, 201);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 8;
@@ -134,7 +140,7 @@
             // comboBoxSubjects
             // 
             this.comboBoxSubjects.FormattingEnabled = true;
-            this.comboBoxSubjects.Location = new System.Drawing.Point(448, 187);
+            this.comboBoxSubjects.Location = new System.Drawing.Point(448, 217);
             this.comboBoxSubjects.Name = "comboBoxSubjects";
             this.comboBoxSubjects.Size = new System.Drawing.Size(197, 21);
             this.comboBoxSubjects.TabIndex = 7;
@@ -142,7 +148,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(445, 226);
+            this.label5.Location = new System.Drawing.Point(445, 241);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(34, 13);
             this.label5.TabIndex = 9;
@@ -150,7 +156,7 @@
             // 
             // textBoxTopic
             // 
-            this.textBoxTopic.Location = new System.Drawing.Point(448, 242);
+            this.textBoxTopic.Location = new System.Drawing.Point(448, 257);
             this.textBoxTopic.Name = "textBoxTopic";
             this.textBoxTopic.Size = new System.Drawing.Size(197, 20);
             this.textBoxTopic.TabIndex = 10;
@@ -277,11 +283,79 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // comboBoxHour
+            // 
+            this.comboBoxHour.FormattingEnabled = true;
+            this.comboBoxHour.Items.AddRange(new object[] {
+            "00",
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23"});
+            this.comboBoxHour.Location = new System.Drawing.Point(445, 70);
+            this.comboBoxHour.Name = "comboBoxHour";
+            this.comboBoxHour.Size = new System.Drawing.Size(84, 21);
+            this.comboBoxHour.TabIndex = 22;
+            // 
+            // comboBoxMin
+            // 
+            this.comboBoxMin.FormattingEnabled = true;
+            this.comboBoxMin.Items.AddRange(new object[] {
+            "00",
+            "15",
+            "30",
+            "45"});
+            this.comboBoxMin.Location = new System.Drawing.Point(563, 70);
+            this.comboBoxMin.Name = "comboBoxMin";
+            this.comboBoxMin.Size = new System.Drawing.Size(82, 21);
+            this.comboBoxMin.TabIndex = 23;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(442, 54);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "Hour";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(560, 54);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(24, 13);
+            this.label9.TabIndex = 25;
+            this.label9.Text = "Min";
+            // 
             // LessonsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(663, 450);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.comboBoxMin);
+            this.Controls.Add(this.comboBoxHour);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonModify);
             this.Controls.Add(this.buttonDelAllLessons);
@@ -338,5 +412,9 @@
         private System.Windows.Forms.Button buttonDelAllLessons;
         private System.Windows.Forms.Button buttonModify;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comboBoxHour;
+        private System.Windows.Forms.ComboBox comboBoxMin;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
